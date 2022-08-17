@@ -5,3 +5,9 @@ services:
       context: ./docker
       dockerfile: Dockerfile
     image: steamlit:v0
+    container_name: recsys
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./src:/workspace
+    command: 'run app.py'
