@@ -18,6 +18,10 @@ def main():
     start_idx = (st.session_state.page_number - 1) * page_per
     end_idx = st.session_state.page_number * page_per
 
+    with st.sidebar:
+        with st.expander('Listing Data'):
+            st.button('Movies')
+
     with st.container():
         first, prev, pages, next, last = st.columns([1, 1, 5, 1, 1], gap="large")
         first.button('First', key='top-first-page', on_click=move_to_page, args=(1, ), disabled=(st.session_state.page_number == 1))
