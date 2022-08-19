@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit_elements import elements, mui
 import math
 from modules.dataset import Dataset
 
@@ -17,10 +18,7 @@ def main():
     last_page = math.ceil(len(dataset.movies) / page_per)
     start_idx = (st.session_state.page_number - 1) * page_per
     end_idx = st.session_state.page_number * page_per
-
-    with st.sidebar:
-        with st.expander('Listing Data'):
-            st.button('Movies')
+    movies = dataset.movies.iloc[start_idx:end_idx]
 
     with st.container():
         first, prev, pages, next, last = st.columns([1, 1, 5, 1, 1], gap="large")
@@ -29,9 +27,14 @@ def main():
         next.button('Next', key='top-next-page', on_click=move_to_page, args=(st.session_state.page_number + 1, ), disabled=(st.session_state.page_number == last_page))
         last.button('Last', key='top-last-page', on_click=move_to_page, args=(last_page, ), disabled=(st.session_state.page_number == last_page))
 
-    with st.container():
-        st.title('Movie List')
-        st.table(dataset.movies.iloc[start_idx:end_idx])
+    with elements('movides'):
+        with mui.Grid(container=True, spacing=4):
+            for index, row in movies.iterrows():
+                with mui.Grid(item=True, xs=6):
+                    with mui.Card:
+                        mui.CardHeader(title=row['title'])
+                        with mui.CardContent():
+                            mui.Typography(row['genres'], variant='body2', color='text.secondary')
 
     with st.container():
         first, prev, pages, next, last = st.columns([1, 1, 5, 1, 1], gap="large")
